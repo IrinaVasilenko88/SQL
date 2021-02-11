@@ -1,6 +1,7 @@
 package ru.netology.test;
 
 import lombok.val;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DbInteractionDbUtils;
@@ -30,6 +31,10 @@ public class LoginTest {
         val loginPage = new LoginPage();
         loginPage.generateInvalidLogin();
         loginPage.blockNotification();
+    }
+    @AfterAll
+    void cleanUp() throws SQLException{
+        DbInteractionDbUtils.clearTables();
     }
 }
 
