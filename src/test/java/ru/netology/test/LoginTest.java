@@ -30,6 +30,8 @@ public class LoginTest {
     void shouldBlock() {
         val loginPage = new LoginPage();
         loginPage.generateInvalidLogin();
+        loginPage.generateInvalidLogin();
+        loginPage.generateInvalidLogin();
         loginPage.blockNotification();
     }
     @AfterAll
