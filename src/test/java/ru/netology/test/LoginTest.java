@@ -5,37 +5,42 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DbInteractionDbUtils;
+import ru.netology.data.UserInfo;
 import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
 
-import java.sql.SQLException;
+
 
 import static com.codeborne.selenide.Selenide.open;
 
 public class LoginTest {
+    UserInfo userInfo = new UserInfo("vasya", "qwerty123");
+
     @BeforeEach
-    void setUp() throws SQLException {
+    void setUp() {
         open("http://localhost:9999");
     }
 
     @Test
     void shouldLogin() {
         val loginPage = new LoginPage();
-        val verificationPage = loginPage.validLogin();
+        val verificationPage = loginPage.validLogin(userInfo);
         DashboardPage dashboardPage = verificationPage.validVerify(DbInteractionDbUtils.getVerificationCode());
-        dashboardPage.getHeading();
+
     }
 
     @Test
     void shouldBlock() {
         val loginPage = new LoginPage();
-        loginPage.generateInvalidLogin();
-        loginPage.generateInvalidLogin();
-        loginPage.generateInvalidLogin();
+        loginPage.generateInvalidLogin(userInfo);
+        loginPage.cleanFields(userInfo);
+        loginPage.generateInvalidLogin(userInfo);
+        loginPage.cleanFields(userInfo);
+        loginPage.generateInvalidLogin(userInfo);
         loginPage.blockNotification();
     }
     @AfterAll
-    void cleanUp() throws SQLException{
+    static void cleanUp() {
         DbInteractionDbUtils.clearTables();
     }
 }
