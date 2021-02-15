@@ -26,8 +26,8 @@ public class DbInteractionDbUtils {
         }
         return null;
     }
-@AfterAll
-    public static void clearTables() throws SQLException {
+
+    public static void clearTables(){
         val deleteCode = "DELETE FROM auth_codes";
         val deleteTransaction = "DELETE FROM card_transactions";
         val deleteCard= "DELETE FROM cards";
