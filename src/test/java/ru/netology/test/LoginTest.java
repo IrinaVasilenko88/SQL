@@ -6,12 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DbInteractionDbUtils;
 import ru.netology.data.UserInfo;
-import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
 
-
-
 import static com.codeborne.selenide.Selenide.open;
+import static ru.netology.data.DataGenerator.generateUserInfo;
+import static ru.netology.data.DataGenerator.getInvalidUserInfo;
 
 public class LoginTest {
     UserInfo userInfo = new UserInfo("vasya", "qwerty123");
@@ -21,28 +20,31 @@ public class LoginTest {
         open("http://localhost:9999");
     }
 
-    @Test
-    void shouldLogin() {
-        val loginPage = new LoginPage();
-        val verificationPage = loginPage.validLogin(userInfo);
-        DashboardPage dashboardPage = verificationPage.validVerify(DbInteractionDbUtils.getVerificationCode());
-
-    }
-
-    @Test
-    void shouldBlock() {
-        val loginPage = new LoginPage();
-        loginPage.generateInvalidLogin(userInfo);
-        loginPage.cleanFields(userInfo);
-        loginPage.generateInvalidLogin(userInfo);
-        loginPage.cleanFields(userInfo);
-        loginPage.generateInvalidLogin(userInfo);
-        loginPage.blockNotification();
-    }
     @AfterAll
     static void cleanUp() {
         DbInteractionDbUtils.clearTables();
     }
+
+    @Test
+    void shouldLogin() {
+        val validUser = generateUserInfo();
+        val loginPage = new LoginPage();
+        val verificationPage = loginPage.validLogin(validUser);
+        verificationPage.validVerify(DbInteractionDbUtils.getVerificationCode());
+    }
+
+    @Test
+    void shouldBlock() {
+        val invalidUser = getInvalidUserInfo();
+        val loginPage = new LoginPage();
+        loginPage.login(invalidUser);
+        loginPage.cleanFields();
+        loginPage.login(invalidUser);
+        loginPage.cleanFields();
+        loginPage.login(invalidUser);
+        loginPage.blockNotification();
+    }
+
 }
 
 
