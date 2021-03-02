@@ -13,8 +13,7 @@ import static ru.netology.data.DataGenerator.generateUserInfo;
 import static ru.netology.data.DataGenerator.getInvalidUserInfo;
 
 public class LoginTest {
-    UserInfo userInfo = new UserInfo("vasya", "qwerty123");
-
+    
     @BeforeEach
     void setUp() {
         open("http://localhost:9999");
